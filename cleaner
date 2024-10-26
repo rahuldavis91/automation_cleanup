@@ -1,0 +1,25 @@
+@echo off
+echo ===== Starting PC Cleanup =====
+
+:: Close Chrome and clear its data
+TASKKILL /IM chrome.exe /F
+del /f /s /q "%LocalAppData%\Google\Chrome\User Data\Default\Cache\*"
+del /f /s /q "%LocalAppData%\Google\Chrome\User Data\Default\History"
+
+:: Close Microsoft Edge and clear its data
+TASKKILL /IM msedge.exe /F
+del /f /s /q "%LocalAppData%\Microsoft\Edge\User Data\Default\Cache\*"
+del /f /s /q "%LocalAppData%\Microsoft\Edge\User Data\Default\History"
+
+:: Clear Temporary Files and Recent Items
+del /f /s /q "%LocalAppData%\Temp\*"
+del /f /s /q "%AppData%\Microsoft\Windows\Recent\*"
+del /f /s /q "%UserProfile%\Recent\*"
+del /f /s /q "%AppData%\Microsoft\Office\Recent\*"
+
+:: Clear Internet Explorer and File History
+RunDll32.exe InetCpl.cpl,ClearMyTracksByProcess 255
+
+:: Display completion message
+echo Cleanup completed successfully!
+pause
