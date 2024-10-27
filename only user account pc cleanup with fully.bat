@@ -1,4 +1,17 @@
 @echo off
+set password=1234
+echo Enter the password to run this script:
+set /p userInput=
+
+if not "%userInput%"=="%password%" (
+    echo Incorrect password. Access denied.
+    exit /b
+)
+
+echo Correct password. Running the script...
+:: Aapka main code yahaan se shuru hota hai
+
+@echo off
 :: Ensure script runs as administrator
 :: Check social media site access for 15 common sites, then perform cleanup for user accounts only.
 
