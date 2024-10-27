@@ -1,5 +1,5 @@
 @echo off
-set password=1234
+set password=4321
 echo Enter the password to run this script:
 set /p userInput=
 
