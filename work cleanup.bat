@@ -11,63 +11,45 @@ set /p "userInput=Enter password to continue: "
 :: Check if the entered password matches the predefined password
 if "%userInput%"=="%password%" (
     echo Password correct! Starting automated cleanup process...
-    echo.
-    goto start_cleanup
-) else (
-    echo Incorrect password! Exiting...
-    exit /b
-)
+    
+echo Starting system clean-up...
 
-:start_cleanup
-:: 1. Clear Chrome Data
-echo Clearing Chrome data...
-rd /s /q "C:\Users\%username%\AppData\Local\Google\Chrome\User Data\Default\Cache"
-rd /s /q "C:\Users\%username%\AppData\Local\Google\Chrome\User Data\Default\History"
-rd /s /q "C:\Users\%username%\AppData\Local\Google\Chrome\User Data\Default\Cookies"
-rd /s /q "C:\Users\%username%\AppData\Local\Google\Chrome\User Data\Default\Local Storage"
-echo Chrome data cleared.
-echo.
+REM Step 1: Clear Chrome browsing data
+echo Clearing Chrome browsing data...
+rmdir /s /q "%LocalAppData%\Google\Chrome\User Data\Default\Cache"
+rmdir /s /q "%LocalAppData%\Google\Chrome\User Data\Default\History"
+rmdir /s /q "%LocalAppData%\Google\Chrome\User Data\Default\Cookies"
+rmdir /s /q "%LocalAppData%\Google\Chrome\User Data\Default\Web Data"
 
-:: 2. Clear Edge Data
-echo Clearing Edge data...
-rd /s /q "C:\Users\%username%\AppData\Local\Microsoft\Edge\User Data\Default\Cache"
-rd /s /q "C:\Users\%username%\AppData\Local\Microsoft\Edge\User Data\Default\History"
-rd /s /q "C:\Users\%username%\AppData\Local\Microsoft\Edge\User Data\Default\Cookies"
-rd /s /q "C:\Users\%username%\AppData\Local\Microsoft\Edge\User Data\Default\Local Storage"
-echo Edge data cleared.
-echo.
+REM Step 2: Clear Edge browsing data
+echo Clearing Edge browsing data...
+rmdir /s /q "%LocalAppData%\Microsoft\Edge\User Data\Default\Cache"
+rmdir /s /q "%LocalAppData%\Microsoft\Edge\User Data\Default\History"
+rmdir /s /q "%LocalAppData%\Microsoft\Edge\User Data\Default\Cookies"
+rmdir /s /q "%LocalAppData%\Microsoft\Edge\User Data\Default\Web Data"
 
-:: 3. Delete Recent Files in Excel and Office
-echo Deleting recent Excel and Office files...
-del "C:\Users\%username%\AppData\Roaming\Microsoft\Office\Recent\*.*" /F /Q
-del "C:\Users\%username%\AppData\Local\Microsoft\Office\UnsavedFiles\*.*" /F /Q
-echo Recent files cleared.
-echo.
+REM Step 3: Clear Excel and Office recent files in AppData Roaming
+echo Clearing recent files from Excel and Office...
+del /q "%AppData%\Microsoft\Excel\*.xls*"
+del /q "%AppData%\Microsoft\Office\Recent\*"
+del /q "%AppData%\Microsoft\Windows\Recent\*"
 
-:: 4. Delete Windows Recent Files
-echo Deleting Windows Recent Files...
-del "C:\Users\%username%\AppData\Roaming\Microsoft\Windows\Recent\*.*" /F /Q
-echo Windows Recent Files cleared.
-echo.
+REM Step 4: Clear Unsaved Files in Local AppData
+echo Clearing unsaved Office files...
+del /q "%LocalAppData%\Microsoft\Office\UnsavedFiles\*"
 
-:: 5. Delete Temp and Prefetch Files
-echo Deleting temporary and prefetch files...
-del "C:\Users\%username%\AppData\Local\Temp\*.*" /F /Q
-del "C:\Windows\Prefetch\*.*" /F /Q
-echo Temp and Prefetch files cleared.
-echo.
+REM Step 5: Clear Temp and Prefetch Files
+echo Clearing Temp and Prefetch files...
+del /q /s "%Temp%\*"
+del /q /s "C:\Windows\Prefetch\*"
 
-:: 6. Clear Control Panel File History
+REM Step 6: Clear Control Panel File History
 echo Clearing Control Panel File History...
-PowerShell -Command "Clear-History"
-echo File History cleared.
-echo.
+RunDll32.exe InetCpl.cpl,ClearMyTracksByProcess 1
 
-:: 7. Clear Internet Explorer browsing history
-echo Clearing Internet Explorer browsing history...
+REM Step 7: Clear Internet Options Browsing History from Control Panel
+echo Clearing Internet Options browsing history...
 RunDll32.exe InetCpl.cpl,ClearMyTracksByProcess 255
-echo Internet Explorer browsing history cleared.
-echo.
 
-echo Cleanup process complete.
+echo Clean-up completed successfully!
 pause
